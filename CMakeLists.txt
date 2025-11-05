@@ -28,10 +28,5 @@ target_include_directories(${lib_name} INTERFACE ${dir})
 # enable all warnings
 target_compile_options(${lib_name} INTERFACE -Wall -Wextra)
 
-
-# ====================================================================
-# !!! 최종 수정: examples 폴더를 빌드 목록에 추가합니다 !!!
-# 이 명령어가 없었기 때문에 .uf2 파일이 생성되지 않았습니다.
-# ====================================================================
-
-add_subdirectory(examples)
+# [수정 완료] 아래에 있던 add_subdirectory(examples) 명령을 제거했습니다.
+# 이 명령이 재귀 호출 오류(Max Recursion Depth Exceeded)의 원인이었습니다.
