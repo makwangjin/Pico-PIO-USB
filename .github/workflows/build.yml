@@ -58,21 +58,23 @@ jobs:
         make
 
     # ====================================================================
-    # !!! 수정 부분: Artifact Upload Path 수정 완료 !!!
+    # !!! 최종 수정: Artifact Upload Path 수정 !!!
+    # Artifacts를 업로드할 때는 examples/build/ 폴더 안의 경로를 사용해야 합니다.
     # ====================================================================
     - uses: actions/upload-artifact@v4
       with:
         name: example_binaries-${{ matrix.board }}-sdk-${{ matrix.sdk_version }}
         path: |
-          # [기존 항목] examples/build 폴더의 파일
+          # [기존 항목]
           examples/build/usb_device/usb_device.uf2
           examples/build/usb_device/usb_device.hex
           examples/build/host_hid_to_device_cdc/host_hid_to_device_cdc.uf2
           examples/build/host_hid_to_device_cdc/host_hid_to_device_cdc.hex
           
-          # [핵심 수정] host_hid_to_device_hid.uf2 파일의 실제 위치 (examples/하위 폴더)
-          examples/host_hid_to_device_hid/host_hid_to_device_hid.uf2
-          examples/host_hid_to_device_hid/host_hid_to_device_hid.hex
+          # [핵심 수정] host_hid_to_device_hid는 examples/build 내부의 해당 폴더에서 생성됩니다.
+          # 이 경로는 CMAKE가 만든 빌드 구조를 따릅니다.
+          examples/build/host_hid_to_device_hid/host_hid_to_device_hid.uf2 
+          examples/build/host_hid_to_device_hid/host_hid_to_device_hid.hex
 
   build-arduino:
     strategy:
