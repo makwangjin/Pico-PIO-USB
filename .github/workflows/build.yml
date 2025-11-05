@@ -58,7 +58,7 @@ jobs:
         make
 
     # ====================================================================
-    # !!! 수정 부분: CH9329 번역기 펌웨어 업로드 추가 !!!
+    # !!! 수정 부분: 들여쓰기 오류 수정 완료 !!!
     # ====================================================================
     - uses: actions/upload-artifact@v4
       with:
@@ -68,11 +68,12 @@ jobs:
           examples/build/usb_device/usb_device.hex
           examples/build/host_hid_to_device_cdc/host_hid_to_device_cdc.uf2
           examples/build/host_hid_to_device_cdc/host_hid_to_device_cdc.hex
-          # CH9329 번역기 펌웨어 추가 (Artifacts 목록에 추가됨)
+          # CH9329 번역기 펌웨어
           examples/build/host_hid_to_device_hid/host_hid_to_device_hid.uf2
           examples/build/host_hid_to_device_hid/host_hid_to_device_hid.hex
 
   build-arduino:
+# ... (build-arduino job은 원본 그대로 유지) ...
     strategy:
       fail-fast: false
       matrix:
