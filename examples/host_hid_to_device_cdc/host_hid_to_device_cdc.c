@@ -74,7 +74,6 @@ const uint8_t colemak[128] = {
 #endif
 
 // [수정] last_mouse_report 초기화 (빌드 경고 해결)
-// TinyUSB hid_mouse_report_t는 버튼, X, Y, Wheel 4개의 필드만 가집니다.
 static hid_mouse_report_t last_mouse_report = { 0 }; 
 static uint8_t hid_mouse_count = 0;
 static uint8_t hid_kbd_count = 0;
@@ -247,7 +246,8 @@ void tuh_hid_report_received_cb(uint8_t dev_addr, uint8_t instance, uint8_t cons
     case HID_ITF_PROTOCOL_MOUSE:
       // [수정] 마우스 인터페이스가 선택된 첫 번째 인터페이스인지 확인
       if (hid_mouse_count == 1) {
-          process_mouse_mouse(dev_addr, (hid_mouse_report_t const*) report ); // [오류] 함수 이름 수정
+          // [오류 수정] 함수 이름 오타 수정: process_mouse_mouse -> process_mouse_report
+          process_mouse_report(dev_addr, (hid_mouse_report_t const*) report );
       }
     break;
 
@@ -261,4 +261,31 @@ void tuh_hid_report_received_cb(uint8_t dev_addr, uint8_t instance, uint8_t cons
   {
     // 에러 처리
   }
+}
+
+// ================================================================
+// [추가] TinyUSB Device 필수 콜백 함수 구현 (링커 오류 해결)
+// ================================================================
+
+// HID Device Descriptor (KVM에게 자신을 소개하는 역할)
+uint8_t const *tud_hid_descriptor_report_cb(uint8_t instance) {
+    // 0x01: 키보드, 0x02: 마우스
+    // KVM이 인식하기 쉽도록 부트 프로토콜만 사용하는 단순한 디스크립터를 반환합니다.
+    static uint8_t const desc_hid_report[] = {
+        TUD_HID_REPORT_DESC_KEYBOARD(HID_REPORT_ID(1)),
+        TUD_HID_REPORT_DESC_MOUSE(HID_REPORT_ID(2))
+    };
+    return desc_hid_report;
+}
+
+// Invoked when received GET_REPORT control request
+uint16_t tud_hid_get_report_cb(uint8_t instance, uint8_t report_id, hid_report_type_t type, uint8_t* buffer, uint16_t reqlen) {
+    // 우리는 보고서(Report)를 보내지 않으므로, 요청된 길이를 반환합니다.
+    return reqlen;
+}
+
+// Invoked when received SET_REPORT control request
+void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id, hid_report_type_t type, uint8_t const* buffer, uint16_t bufsize) {
+    // KVM으로부터 키보드의 LED 상태(Num Lock, Caps Lock)를 수신할 때 사용됩니다.
+    // 우리는 LED 상태를 처리하지 않으므로, 이 함수는 비워둡니다.
 }
