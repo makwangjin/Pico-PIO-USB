@@ -1,6 +1,3 @@
-# Copyright (c) 2021 sekigon-gonnoc
-# Original file modified for CH9329 translator project
-
 set(lib_name pico_pio_usb)
 add_library(${lib_name} INTERFACE)
 
@@ -28,5 +25,5 @@ target_include_directories(${lib_name} INTERFACE ${dir})
 # enable all warnings
 target_compile_options(${lib_name} INTERFACE -Wall -Wextra)
 
-# [수정 완료] 아래에 있던 add_subdirectory(examples) 명령을 제거했습니다.
-# 이 명령이 재귀 호출 오류(Max Recursion Depth Exceeded)의 원인이었습니다.
+# [복원] 이 명령이 없으면 예제 빌드가 불가능합니다.
+add_subdirectory(examples)
