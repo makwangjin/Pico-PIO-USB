@@ -1,3 +1,8 @@
+# (이 파일의 가장 윗부분에 추가)
+# CMake 빌드 시스템에 HID Device 기능이 필요함을 알립니다.
+add_definitions(-DCFG_TUD_HID=1) 
+add_definitions(-DCFG_TUD_MAX_SPEED=OPT_MODE_FULL_SPEED)
+
 set(target_name host_hid_to_device_cdc)
 add_executable(${target_name})
 
@@ -21,4 +26,5 @@ target_include_directories(${target_name} PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 
 target_link_libraries(${target_name} PRIVATE pico_stdlib pico_pio_usb tinyusb_device tinyusb_host)
 pico_add_extra_outputs(${target_name})
+
 
