@@ -58,22 +58,23 @@ jobs:
         make
 
     # ====================================================================
-    # !!! 수정 부분: 들여쓰기 오류 수정 완료 !!!
+    # !!! 수정 부분: Artifact Upload Path 수정 완료 !!!
     # ====================================================================
     - uses: actions/upload-artifact@v4
       with:
         name: example_binaries-${{ matrix.board }}-sdk-${{ matrix.sdk_version }}
         path: |
+          # [기존 항목] examples/build 폴더의 파일
           examples/build/usb_device/usb_device.uf2
           examples/build/usb_device/usb_device.hex
           examples/build/host_hid_to_device_cdc/host_hid_to_device_cdc.uf2
           examples/build/host_hid_to_device_cdc/host_hid_to_device_cdc.hex
-          # CH9329 번역기 펌웨어
-          examples/build/host_hid_to_device_hid/host_hid_to_device_hid.uf2
-          examples/build/host_hid_to_device_hid/host_hid_to_device_hid.hex
+          
+          # [핵심 수정] host_hid_to_device_hid.uf2 파일의 실제 위치 (examples/하위 폴더)
+          examples/host_hid_to_device_hid/host_hid_to_device_hid.uf2
+          examples/host_hid_to_device_hid/host_hid_to_device_hid.hex
 
   build-arduino:
-# ... (build-arduino job은 원본 그대로 유지) ...
     strategy:
       fail-fast: false
       matrix:
